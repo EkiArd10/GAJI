@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perhitungan Gaji</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Gaya umum */
+        body {
+            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font yang lebih modern */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Gaya Jumbotron */
+        .jumbotron {
+            padding: 4rem 2rem;
+            border-radius: 15px;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') no-repeat center center; /* Ganti dengan URL gambar Anda */
+            background-size: cover;
+            color: white;
+            text-align: center;
+        }
+
+        .jumbotron h1 {
+            font-size: 3rem; /* Lebih besar */
+            font-weight: bold;
+        }
+
+        /* Gaya form */
+        .form-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-top: -2rem; /* Sedikit overlap dengan jumbotron */
+        }
+
+        /* Gaya hasil */
+        .result {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function hitungGaji() {
+            // Mengambil nilai input dari user
+            var jumlahTransport = parseInt(document.getElementById('jumlahTransport').value) || 0;
+            var jumlahMakan = parseInt(document.getElementById('jumlahMakan').value) || 0;
+            var jumlahOperasional = parseInt(document.getElementById('jumlahOperasional').value) || 0;
+            var jamLembur = parseInt(document.getElementById('jamLembur').value) || 0;
+            var tunjanganKeahlian = parseInt(document.getElementById('tunjanganKeahlian').value) || 0;
+
+            // Menghitung tunjangan
+            var tunjanganTransport = jumlahTransport * 20000;
+            var tunjanganMakan = jumlahMakan * 25000;
+            var tunjanganOperasional = jumlahOperasional * 25000;
+            var tunjanganLembur = jamLembur * 26012;
+
+            // Gaji Pokok
+            var gajiPokok = 4500000;
+
+            // Menghitung total gaji
+            var totalGaji = gajiPokok + tunjanganKeahlian + tunjanganTransport + tunjanganMakan + tunjanganOperasional + tunjanganLembur;
+
+            // Menampilkan hasil
+            document.getElementById('tunjanganTransport').innerText = 'Rp ' + tunjanganTransport.toLocaleString();
+            document.getElementById('tunjanganMakan').innerText = 'Rp ' + tunjanganMakan.toLocaleString();
+            document.getElementById('tunjanganOperasional').innerText = 'Rp ' + tunjanganOperasional.toLocaleString();
+            document.getElementById('tunjanganLembur').innerText = 'Rp ' + tunjanganLembur.toLocaleString();
+            document.getElementById('totalGaji').innerText = 'Rp ' + totalGaji.toLocaleString();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="jumbotron">
+            <h1 class="display-4">Perhitungan Gaji IT Support PT. Apex</h1>
+            <p class="lead">Masukkan data untuk menghitung total gaji Anda.</p>
+        </div>
+        <div class="form-container">
+            <form onsubmit="event.preventDefault(); hitungGaji();">
+                <div class="form-group">
+                    <label for="jumlahTransport">Jumlah Transport:</label>
+                    <input type="number" class="form-control" id="jumlahTransport" name="jumlahTransport">
+                </div>
+                <div class="form-group">
+                    <label for="jumlahMakan">Jumlah Makan:</label>
+                    <input type="number" class="form-control" id="jumlahMakan" name="jumlahMakan">
+                </div>
+                <div class="form-group">
+                    <label for="jumlahOperasional">Jumlah Operasional:</label>
+                    <input type="number" class="form-control" id="jumlahOperasional" name="jumlahOperasional">
+                </div>
+                <div class="form-group">
+                    <label for="jamLembur">Total Jam Lembur:</label>
+                    <input type="number" class="form-control" id="jamLembur" name="jamLembur">
+                </div>
+                <div class="form-group">
+                    <label for="tunjanganKeahlian">Tunjangan Keahlian:</label>
+                    <input type="number" class="form-control" id="tunjanganKeahlian" name="tunjanganKeahlian">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Hitung Gaji</button>
+            </form>
+            <div class="result mt-4">
+                <p>Tunjangan Transport: <span id="tunjanganTransport">Rp 0</span></p>
+                <p>Tunjangan Makan: <span id="tunjanganMakan">Rp 0</span></p>
+                <p>Tunjangan Operasional: <span id="tunjanganOperasional">Rp 0</span></p>
+                <p>Tunjangan Lembur: <span id="tunjanganLembur">Rp 0</span></p>
+                <p>Total Gaji: <span id="totalGaji">Rp 0</span></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
