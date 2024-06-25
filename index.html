@@ -57,12 +57,23 @@
             // Menghitung total gaji
             var totalGaji = gajiPokok + tunjanganKeahlian + tunjanganTransport + tunjanganMakan + tunjanganOperasional + tunjanganLembur;
 
+            // Menghitung pajak
+            var pajakJHT = totalGaji * 0.02;
+            var pajakPPH21 = totalGaji * 0.02;
+            var totalPajak = pajakJHT + pajakPPH21;
+
+            // Menghitung gaji bersih setelah pajak
+            var gajiBersih = totalGaji - totalPajak;
+
             // Menampilkan hasil
             document.getElementById('tunjanganTransport').innerText = 'Rp ' + tunjanganTransport.toLocaleString();
             document.getElementById('tunjanganMakan').innerText = 'Rp ' + tunjanganMakan.toLocaleString();
             document.getElementById('tunjanganOperasional').innerText = 'Rp ' + tunjanganOperasional.toLocaleString();
             document.getElementById('tunjanganLembur').innerText = 'Rp ' + tunjanganLembur.toLocaleString();
             document.getElementById('totalGaji').innerText = 'Rp ' + totalGaji.toLocaleString();
+            document.getElementById('pajakJHT').innerText = 'Rp ' + pajakJHT.toLocaleString();
+            document.getElementById('pajakPPH21').innerText = 'Rp ' + pajakPPH21.toLocaleString();
+            document.getElementById('gajiBersih').innerText = 'Rp ' + gajiBersih.toLocaleString();
         }
     </script>
 </head>
@@ -94,6 +105,9 @@
                 <p>Tunjangan Operasional: <span id="tunjanganOperasional">Rp 0</span></p>
                 <p>Tunjangan Lembur: <span id="tunjanganLembur">Rp 0</span></p>
                 <p>Total Gaji: <span id="totalGaji">Rp 0</span></p>
+                <p>Pajak JHT (2%): <span id="pajakJHT">Rp 0</span></p>
+                <p>Pajak PPH21 (2%): <span id="pajakPPH21">Rp 0</span></p>
+                <p>Gaji Bersih: <span id="gajiBersih">Rp 0</span></p>
             </div>
         </div>
     </div>
