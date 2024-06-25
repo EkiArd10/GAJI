@@ -41,7 +41,13 @@
             text-align: center;
             margin-top: 20px;
             font-size: 1.3rem;
-            color: #555;
+            color: #ffffff;
+        }
+        .footer2 {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.3rem;
+            color: #f52b2b;
         }
     </style>
     <script>
@@ -97,6 +103,9 @@
         <div class="jumbotron mt-4">
             <h1 class="display-4">Perhitungan Gaji IT Support PT. Apex</h1>
             <p class="lead">Masukkan data untuk menghitung total gaji Anda.</p>
+            <div class="footer">
+                <p>Created By: Eki Ardiansyah</p>
+            </div>
         </div>
         <div class="form-container">
             <form onsubmit="event.preventDefault(); hitungGaji();">
@@ -125,9 +134,9 @@
                 <p>Pajak PPH21 (2%): <span id="pajakPPH21">Rp 0</span></p>
                 <strong><p>Gaji Bersih: <span id="gajiBersih">Rp 0</span></p></strong>
             </div>
-        </div>
-        <div class="footer">
-            <p>Created By: Eki Ardiansyah</p>
+            <div class="footer2">
+                <p>Created By: Eki Ardiansyah</p>
+            </div>
         </div>
     </div>
 </body>
