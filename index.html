@@ -37,12 +37,18 @@
             border-radius: 10px;
             margin-top: 20px;
         }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.3rem;
+            color: #555;
+        }
     </style>
     <script>
         function hitungGaji() {
             // Mengambil nilai input dari user
             var jumlahHari = parseInt(document.getElementById('jumlahHari').value) || 0;
-            var jamLembur = parseInt(document.getElementById('jamLembur').value) || 0;
+            var jamLembur = parseFloat(document.getElementById('jamLembur').value) || 0;
             var tunjanganKeahlian = parseInt(document.getElementById('tunjanganKeahlian').value) || 0;
 
             // Menghitung tunjangan
@@ -75,6 +81,15 @@
             document.getElementById('pajakPPH21').innerText = 'Rp ' + pajakPPH21.toLocaleString();
             document.getElementById('gajiBersih').innerText = 'Rp ' + gajiBersih.toLocaleString();
         }
+
+        function validateFloatInput(event) {
+            var input = event.target.value;
+            var regex = /^\d*\.?\d{0,2}$/;
+
+            if (!regex.test(input)) {
+                event.target.value = input.slice(0, -1);
+            }
+        }
     </script>
 </head>
 <body>
@@ -91,7 +106,7 @@
                 </div>
                 <div class="form-group">
                     <label for="jamLembur">Total Jam Lembur :</label>
-                    <input type="number" class="form-control" id="jamLembur" name="jamLembur">
+                    <input type="text" class="form-control" id="jamLembur" name="jamLembur" oninput="validateFloatInput(event)">
                 </div>
                 <div class="form-group">
                     <label for="tunjanganKeahlian">Tunjangan Keahlian :</label>
@@ -104,11 +119,15 @@
                 <p>Tunjangan Makan: <span id="tunjanganMakan">Rp 0</span></p>
                 <p>Tunjangan Operasional: <span id="tunjanganOperasional">Rp 0</span></p>
                 <p>Tunjangan Lembur: <span id="tunjanganLembur">Rp 0</span></p>
-                <p>Total Gaji: <span id="totalGaji">Rp 0</span></p>
+                <strong><p>Total Gaji: <span id="totalGaji">Rp 0</span></p></strong>
+                <br>
                 <p>Pajak JHT (2%): <span id="pajakJHT">Rp 0</span></p>
                 <p>Pajak PPH21 (2%): <span id="pajakPPH21">Rp 0</span></p>
-                <p>Gaji Bersih: <span id="gajiBersih">Rp 0</span></p>
+                <strong><p>Gaji Bersih: <span id="gajiBersih">Rp 0</span></p></strong>
             </div>
+        </div>
+        <div class="footer">
+            <p>Created By: Eki Ardiansyah</p>
         </div>
     </div>
 </body>
