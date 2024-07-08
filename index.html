@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perhitungan Gaji</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-n66wT0xLMYfFwJwkVrwjLrTvEx3odvEXNjjWbW9Mvpnr3x4t+32o+uF5B2grEoZPfAhdrCm7FVHwt+hRbtfSdA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -74,8 +75,11 @@
             var pajakPPH21 = totalGaji * 0.02;
             var totalPajak = pajakJHT + pajakPPH21;
 
-            // Menghitung gaji bersih setelah pajak
-            var gajiBersih = totalGaji - totalPajak;
+            // Menghitung potongan BPJS
+            var potonganBPJS = gajiPokok * 0.01;
+
+            // Menghitung gaji bersih setelah pajak dan potongan BPJS
+            var gajiBersih = totalGaji - totalPajak - potonganBPJS;
 
             // Menampilkan hasil
             document.getElementById('tunjanganTransport').innerText = 'Rp ' + tunjanganTransport.toLocaleString();
@@ -85,6 +89,7 @@
             document.getElementById('totalGaji').innerText = 'Rp ' + totalGaji.toLocaleString();
             document.getElementById('pajakJHT').innerText = 'Rp ' + pajakJHT.toLocaleString();
             document.getElementById('pajakPPH21').innerText = 'Rp ' + pajakPPH21.toLocaleString();
+            document.getElementById('potonganBPJS').innerText = 'Rp ' + potonganBPJS.toLocaleString();
             document.getElementById('gajiBersih').innerText = 'Rp ' + gajiBersih.toLocaleString();
         }
 
@@ -99,40 +104,48 @@
     </script>
 </head>
 <body>
-    <div class="container">
-        <div class="jumbotron mt-4">
-            <h1 class="display-4">Perhitungan Gaji IT Support PT. Apex</h1>
-            <p class="lead">Masukkan data untuk menghitung total gaji Anda.</p>
-            <div class="footer">
-                <p>Created By: Eki Ardiansyah</p>
+    <!-- main content -->
+    <div id="main-content">
+        <div class="container">
+            <div class="jumbotron mt-4">
+                <h1 class="display-4">Perhitungan Gaji IT Support PT. Apex</h1>
+                <p class="lead">Masukkan data untuk menghitung total gaji Anda.</p>
+                <div class="footer">
+                    <p>Created By: Eki Ardiansyah</p>
+                </div>
             </div>
-        </div>
-        <div class="form-container">
-            <form onsubmit="event.preventDefault(); hitungGaji();">
-                <div class="form-group">
-                    <label for="jumlahHari">Jumlah Hari Kerja (Transport, Makan, Operasional) :</label>
-                    <input type="number" class="form-control" id="jumlahHari" name="jumlahHari">
+            <div class="form-container">
+                <form onsubmit="event.preventDefault(); hitungGaji();">
+                    <div class="form-group">
+                        <label for="jumlahHari">Jumlah Hari Kerja (Transport, Makan, Operasional) :</label>
+                        <input type="number" class="form-control" id="jumlahHari" name="jumlahHari">
+                    </div>
+                    <div class="form-group">
+                        <label for="jamLembur">Total Jam Lembur :</label>
+                        <input type="text" class="form-control" id="jamLembur" name="jamLembur" oninput="validateFloatInput(event)">
+                    </div>
+                    <div class="form-group">
+                        <label for="tunjanganKeahlian">Tunjangan Keahlian :</label>
+                        <input type="number" class="form-control" id="tunjanganKeahlian" name="tunjanganKeahlian">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Hitung Gaji</button>
+                </form>
+                <div class="result mt-4">
+                    <p>Tunjangan Transport: <span id="tunjanganTransport">Rp 0</span></p>
+                    <p>Tunjangan Makan: <span id="tunjanganMakan">Rp 0</span></p>
+                    <p>Tunjangan Operasional: <span id="tunjanganOperasional">Rp 0</span></p>
+                    <p>Tunjangan Lembur: <span id="tunjanganLembur">Rp 0</span></p>
+                    <strong><p>Total Gaji: <span id="totalGaji">Rp 0</span></p></strong>
+                    <br>
+                    <p>Pajak JHT (2%): <span id="pajakJHT">Rp 0</span></p>
+                    <p>Pajak PPH21 (2%): <span id="pajakPPH21">Rp 0</span></p>
+                    <p>Potongan BPJS (1%): <span id="potonganBPJS">Rp 0</span></p>
+                    <strong><p>Gaji Bersih: <span id="gajiBersih">Rp 0</span></p></strong>
                 </div>
-                <div class="form-group">
-                    <label for="jamLembur">Total Jam Lembur :</label>
-                    <input type="text" class="form-control" id="jamLembur" name="jamLembur" oninput="validateFloatInput(event)">
-                </div>
-                <div class="form-group">
-                    <label for="tunjanganKeahlian">Tunjangan Keahlian :</label>
-                    <input type="number" class="form-control" id="tunjanganKeahlian" name="tunjanganKeahlian">
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Hitung Gaji</button>
-            </form>
-            <div class="result mt-4">
-                <p>Tunjangan Transport: <span id="tunjanganTransport">Rp 0</span></p>
-                <p>Tunjangan Makan: <span id="tunjanganMakan">Rp 0</span></p>
-                <p>Tunjangan Operasional: <span id="tunjanganOperasional">Rp 0</span></p>
-                <p>Tunjangan Lembur: <span id="tunjanganLembur">Rp 0</span></p>
-                <strong><p>Total Gaji: <span id="totalGaji">Rp 0</span></p></strong>
                 <br>
-                <p>Pajak JHT (2%): <span id="pajakJHT">Rp 0</span></p>
-                <p>Pajak PPH21 (2%): <span id="pajakPPH21">Rp 0</span></p>
-                <strong><p>Gaji Bersih: <span id="gajiBersih">Rp 0</span></p></strong>
+                <a href="https://bit.ly/WEBITBC" class="btn btn-primary btn-lg">
+                    <i class="fas fa-arrow-left mr-2"></i> Back To Website
+                </a>                             
             </div>
         </div>
     </div>
