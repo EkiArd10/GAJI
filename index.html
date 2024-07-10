@@ -54,9 +54,16 @@
     <script>
         function hitungGaji() {
             // Mengambil nilai input dari user
-            var jumlahHari = parseInt(document.getElementById('jumlahHari').value) || 0;
-            var jamLembur = parseFloat(document.getElementById('jamLembur').value) || 0;
-            var tunjanganKeahlian = parseInt(document.getElementById('tunjanganKeahlian').value) || 0;
+            var namaKaryawan = document.getElementById('namaKaryawan').value;
+            var jumlahHari = parseInt(document.getElementById('jumlahHari').value);
+            var jamLembur = parseFloat(document.getElementById('jamLembur').value);
+            var tunjanganKeahlian = parseInt(document.getElementById('tunjanganKeahlian').value);
+
+            // Validasi input
+            if (!namaKaryawan || isNaN(jumlahHari) || isNaN(jamLembur) || isNaN(tunjanganKeahlian)) {
+                alert('Harap isi semua kolom yang diperlukan.');
+                return;
+            }
 
             // Menghitung tunjangan
             var tunjanganTransport = jumlahHari * 20000;
@@ -82,6 +89,7 @@
             var gajiBersih = totalGaji - totalPajak - potonganBPJS;
 
             // Menampilkan hasil
+            document.getElementById('namaOutput').innerText = namaKaryawan;
             document.getElementById('tunjanganTransport').innerText = 'Rp ' + tunjanganTransport.toLocaleString();
             document.getElementById('tunjanganMakan').innerText = 'Rp ' + tunjanganMakan.toLocaleString();
             document.getElementById('tunjanganOperasional').innerText = 'Rp ' + tunjanganOperasional.toLocaleString();
@@ -117,20 +125,27 @@
             <div class="form-container">
                 <form onsubmit="event.preventDefault(); hitungGaji();">
                     <div class="form-group">
+                        <label for="namaKaryawan">Nama Karyawan:</label>
+                        <input type="text" class="form-control" id="namaKaryawan" name="namaKaryawan" required>
+                    </div>
+                    <div class="form-group">
                         <label for="jumlahHari">Jumlah Hari Kerja (Transport, Makan, Operasional) :</label>
-                        <input type="number" class="form-control" id="jumlahHari" name="jumlahHari">
+                        <input type="number" class="form-control" id="jumlahHari" name="jumlahHari" required>
                     </div>
                     <div class="form-group">
                         <label for="jamLembur">Total Jam Lembur :</label>
-                        <input type="text" class="form-control" id="jamLembur" name="jamLembur" oninput="validateFloatInput(event)">
+                        <input type="text" class="form-control" id="jamLembur" name="jamLembur" oninput="validateFloatInput(event)" required>
                     </div>
                     <div class="form-group">
                         <label for="tunjanganKeahlian">Tunjangan Keahlian :</label>
-                        <input type="number" class="form-control" id="tunjanganKeahlian" name="tunjanganKeahlian">
+                        <input type="number" class="form-control" id="tunjanganKeahlian" name="tunjanganKeahlian" required>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Hitung Gaji</button>
                 </form>
                 <div class="result mt-4">
+                    <h3>Berikut Perhitungan Gaji Anda</h3>
+                    <br>
+                    <p>Nama Karyawan: <span id="namaOutput"></span></p>
                     <p>Tunjangan Transport: <span id="tunjanganTransport">Rp 0</span></p>
                     <p>Tunjangan Makan: <span id="tunjanganMakan">Rp 0</span></p>
                     <p>Tunjangan Operasional: <span id="tunjanganOperasional">Rp 0</span></p>
@@ -140,7 +155,7 @@
                     <p>Pajak JHT (2%): <span id="pajakJHT">Rp 0</span></p>
                     <p>Pajak PPH21 (2%): <span id="pajakPPH21">Rp 0</span></p>
                     <p>Potongan BPJS (1%): <span id="potonganBPJS">Rp 0</span></p>
-                    <strong><p>Gaji Bersih: <span id="gajiBersih">Rp 0</span></p></strong>
+                    <strong><p>Gaji Bersih / Diterima: <span id="gajiBersih">Rp 0</span></p></strong>
                 </div>
                 <br>
                 <div class="d-flex justify-content-left">
