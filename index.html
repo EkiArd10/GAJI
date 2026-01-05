@@ -75,64 +75,66 @@
         <script>
     function hitungGaji() {
 
-        var namaKaryawan = document.getElementById('namaKaryawan').value;
-        var jumlahHari = parseInt(document.getElementById('jumlahHari').value);
-        var jamLembur = parseInt(document.getElementById('jamLembur').value);
-        var tunjanganKeahlian = parseInt(document.getElementById('tunjanganKeahlian').value);
+    var namaKaryawan = document.getElementById('namaKaryawan').value;
+    var jumlahHari = parseInt(document.getElementById('jumlahHari').value);
+    var jamLembur = parseFloat(document.getElementById('jamLembur').value);
+    var tunjanganKeahlian = parseInt(document.getElementById('tunjanganKeahlian').value);
 
-        if (!namaKaryawan || isNaN(jumlahHari) || isNaN(jamLembur)) {
-            alert("Data belum lengkap");
-            return;
-        }
+    if (!namaKaryawan || isNaN(jumlahHari) || isNaN(jamLembur) || isNaN(tunjanganKeahlian)) {
+        alert("Data belum lengkap");
+        return;
+    }
 
-        // ===== NILAI FIX HR =====
-        var GAJI_POKOK = 4853175;
-        var LEMBUR_FIX = 1378866; // FIX DARI SLIP HR
+    // ===== KONSTANTA =====
+    var GAJI_POKOK = 4853175;
+    var UPAH_LEMBUR = 32104;
 
-        // ===== TUNJANGAN =====
-        var tunjanganTransport = jumlahHari * 20000;
-        var tunjanganMakan = jumlahHari * 25000;
-        var tunjanganOperasional = jumlahHari * 25000;
+    // ===== HITUNG =====
+    var tunjanganTransport = jumlahHari * 20000;
+    var tunjanganMakan = jumlahHari * 25000;
+    var tunjanganOperasional = jumlahHari * 25000;
+    var tunjanganLembur = Math.round(jamLembur * UPAH_LEMBUR);
 
-        // ===== TOTAL PENGHASILAN =====
-        var totalGaji =
-            GAJI_POKOK +
-            tunjanganTransport +
-            tunjanganMakan +
-            tunjanganOperasional +
-            tunjanganKeahlian +
-            LEMBUR_FIX;
+    var totalGaji =
+        GAJI_POKOK +
+        tunjanganTransport +
+        tunjanganMakan +
+        tunjanganOperasional +
+        tunjanganKeahlian +
+        tunjanganLembur;
 
-        // ===== POTONGAN FIX HR =====
-        var bpjsKesehatan = 55540;
-        var bpjsJP = 55540;
-        var bpjsJHT = 111080;
-        var pph21 = 124993;
+    // ===== POTONGAN =====
+    var bpjsKesehatan = 55540;
+    var bpjsJP = 55540;
+    var bpjsJHT = 111080;
+    var pph21 = 124993;
 
-        var totalPotongan =
-            bpjsKesehatan +
-            bpjsJP +
-            bpjsJHT +
-            pph21;
+    var totalPotongan =
+        bpjsKesehatan +
+        bpjsJP +
+        bpjsJHT +
+        pph21;
 
-        var gajiBersih = totalGaji - totalPotongan;
+    var gajiBersih = totalGaji - totalPotongan;
 
-        // ===== OUTPUT =====
-        document.getElementById('namaOutput').innerText = namaKaryawan;
-        document.getElementById('tunjanganTransport').innerText = 'Rp ' + tunjanganTransport.toLocaleString('id-ID');
-        document.getElementById('tunjanganMakan').innerText = 'Rp ' + tunjanganMakan.toLocaleString('id-ID');
-        document.getElementById('tunjanganOperasional').innerText = 'Rp ' + tunjanganOperasional.toLocaleString('id-ID');
-        document.getElementById('tunjanganLembur').innerText = 'Rp ' + LEMBUR_FIX.toLocaleString('id-ID');
-        document.getElementById('totalGaji').innerText = 'Rp ' + totalGaji.toLocaleString('id-ID');
+    // ===== OUTPUT =====
+    document.getElementById('namaOutput').innerText = namaKaryawan;
+    document.getElementById('tunjanganTransport').innerText = 'Rp ' + tunjanganTransport.toLocaleString('id-ID');
+    document.getElementById('tunjanganMakan').innerText = 'Rp ' + tunjanganMakan.toLocaleString('id-ID');
+    document.getElementById('tunjanganOperasional').innerText = 'Rp ' + tunjanganOperasional.toLocaleString('id-ID');
+    document.getElementById('tunjanganLembur').innerText = 'Rp ' + tunjanganLembur.toLocaleString('id-ID');
+    document.getElementById('totalGaji').innerText = 'Rp ' + totalGaji.toLocaleString('id-ID');
 
-        document.getElementById('pajakJHT').innerText = 'Rp ' + bpjsJHT.toLocaleString('id-ID');
-        document.getElementById('pajakPPH21').innerText = 'Rp ' + pph21.toLocaleString('id-ID');
-        document.getElementById('potonganBPJS').innerText =
-            'Rp ' + (bpjsKesehatan + bpjsJP).toLocaleString('id-ID');
-        document.getElementById('totalPotongan').innerText =
+    document.getElementById('pajakJHT').innerText = 'Rp ' + bpjsJHT.toLocaleString('id-ID');
+    document.getElementById('pajakPPH21').innerText = 'Rp ' + pph21.toLocaleString('id-ID');
+    document.getElementById('potonganBPJS').innerText =
+        'Rp ' + (bpjsKesehatan + bpjsJP).toLocaleString('id-ID');
+
+    document.getElementById('totalPotongan').innerText =
         'Rp ' + totalPotongan.toLocaleString('id-ID');
-        document.getElementById('gajiBersih').innerText =
-            'Rp ' + gajiBersih.toLocaleString('id-ID');
+
+    document.getElementById('gajiBersih').innerText =
+        'Rp ' + gajiBersih.toLocaleString('id-ID');
     }
 
     function exportPDF() {
@@ -266,13 +268,13 @@
                             Back To Website
                         </a>
 
-                        <a href="https://wa.me/6282155201146?text=Halo,%20saya%20ingin%20bertanya%20mengenai%20gaji"
+                        <a href="https://wa.me/6281258823452?text=Halo,%20saya%20ingin%20bertanya%20mengenai%20gaji"
                         class="btn btn-success">
                             <i class="fab fa-whatsapp"></i><br>
                             Chat HR<br>(Mas Muharram)
                         </a>
 
-                        <a href="https://wa.me/6282254024990?text=Halo,%20saya%20ingin%20bertanya%20mengenai%20gaji"
+                        <a href="https://wa.me/6282259661605?text=Halo,%20saya%20ingin%20bertanya%20mengenai%20gaji"
                         class="btn btn-success">
                             <i class="fab fa-whatsapp"></i><br>
                             Chat Creator<br>(Eki)
@@ -289,4 +291,3 @@
         </div>
     </body>
     </html>
-
