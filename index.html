@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perhitungan Gaji</title>
+    <title>Perhitungan Gaji IT Engineer </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-n66wT0xLMYfFwJwkVrwjLrTvEx3odvEXNjjWbW9Mvpnr3x4t+32o+uF5B2grEoZPfAhdrCm7FVHwt+hRbtfSdA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
@@ -51,131 +51,213 @@
             color: #f52b2b;
         }
     </style>
-    <script>
-        
-        function hitungGaji() {
-            // Mengambil nilai input dari user
-            var namaKaryawan = document.getElementById('namaKaryawan').value;
-            var jumlahHari = parseInt(document.getElementById('jumlahHari').value);
-            var jamLembur = parseFloat(document.getElementById('jamLembur').value);
-            var tunjanganKeahlian = parseInt(document.getElementById('tunjanganKeahlian').value);
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script>
+    function hitungGaji() {
 
-            // Validasi input
-            if (!namaKaryawan || isNaN(jumlahHari) || isNaN(jamLembur) || isNaN(tunjanganKeahlian)) {
-                alert('Harap isi semua kolom yang diperlukan.');
-                return;
-            }
+        var namaKaryawan = document.getElementById('namaKaryawan').value;
+        var jumlahHari = parseInt(document.getElementById('jumlahHari').value);
+        var jamLembur = parseInt(document.getElementById('jamLembur').value);
+        var tunjanganKeahlian = parseInt(document.getElementById('tunjanganKeahlian').value);
 
-            // Menghitung tunjangan
-            var tunjanganTransport = jumlahHari * 20000;
-            var tunjanganMakan = jumlahHari * 25000;
-            var tunjanganOperasional = jumlahHari * 25000;
-            var tunjanganLembur = jamLembur * 32104;
-
-            // Gaji Pokok
-            var gajiPokok = 4853175;
-
-            // Menghitung total gaji
-            var totalGaji = gajiPokok + tunjanganKeahlian + tunjanganTransport + tunjanganMakan + tunjanganOperasional + tunjanganLembur;
-
-            // Menghitung pajak
-            var pajakJHT = totalGaji * 0.02;
-            var pajakPPH21 = totalGaji * 0.02;
-            var totalPajak = pajakJHT + pajakPPH21;
-
-            // Menghitung potongan BPJS
-            var potonganBPJS = gajiPokok * 0.01;
-
-            // Menghitung gaji bersih setelah pajak dan potongan BPJS
-            var gajiBersih = totalGaji - totalPajak - potonganBPJS;
-
-            // Menampilkan hasil
-            document.getElementById('namaOutput').innerText = namaKaryawan;
-            document.getElementById('tunjanganTransport').innerText = 'Rp ' + tunjanganTransport.toLocaleString();
-            document.getElementById('tunjanganMakan').innerText = 'Rp ' + tunjanganMakan.toLocaleString();
-            document.getElementById('tunjanganOperasional').innerText = 'Rp ' + tunjanganOperasional.toLocaleString();
-            document.getElementById('tunjanganLembur').innerText = 'Rp ' + tunjanganLembur.toLocaleString();
-            document.getElementById('totalGaji').innerText = 'Rp ' + totalGaji.toLocaleString();
-            document.getElementById('pajakJHT').innerText = 'Rp ' + pajakJHT.toLocaleString();
-            document.getElementById('pajakPPH21').innerText = 'Rp ' + pajakPPH21.toLocaleString();
-            document.getElementById('potonganBPJS').innerText = 'Rp ' + potonganBPJS.toLocaleString();
-            document.getElementById('gajiBersih').innerText = 'Rp ' + gajiBersih.toLocaleString();
+        if (!namaKaryawan || isNaN(jumlahHari) || isNaN(jamLembur)) {
+            alert("Data belum lengkap");
+            return;
         }
 
-        function validateFloatInput(event) {
-            var input = event.target.value;
-            var regex = /^\d*\.?\d{0,2}$/;
+        // ===== NILAI FIX HR =====
+        var GAJI_POKOK = 4853175;
+        var LEMBUR_FIX = 1378866; // FIX DARI SLIP HR
 
-            if (!regex.test(input)) {
-                event.target.value = input.slice(0, -1);
-            }
-        }
+        // ===== TUNJANGAN =====
+        var tunjanganTransport = jumlahHari * 20000;
+        var tunjanganMakan = jumlahHari * 25000;
+        var tunjanganOperasional = jumlahHari * 25000;
+
+        // ===== TOTAL PENGHASILAN =====
+        var totalGaji =
+            GAJI_POKOK +
+            tunjanganTransport +
+            tunjanganMakan +
+            tunjanganOperasional +
+            tunjanganKeahlian +
+            LEMBUR_FIX;
+
+        // ===== POTONGAN FIX HR =====
+        var bpjsKesehatan = 55540;
+        var bpjsJP = 55540;
+        var bpjsJHT = 111080;
+        var pph21 = 124993;
+
+        var totalPotongan =
+            bpjsKesehatan +
+            bpjsJP +
+            bpjsJHT +
+            pph21;
+
+        var gajiBersih = totalGaji - totalPotongan;
+
+        // ===== OUTPUT =====
+        document.getElementById('namaOutput').innerText = namaKaryawan;
+        document.getElementById('tunjanganTransport').innerText = 'Rp ' + tunjanganTransport.toLocaleString('id-ID');
+        document.getElementById('tunjanganMakan').innerText = 'Rp ' + tunjanganMakan.toLocaleString('id-ID');
+        document.getElementById('tunjanganOperasional').innerText = 'Rp ' + tunjanganOperasional.toLocaleString('id-ID');
+        document.getElementById('tunjanganLembur').innerText = 'Rp ' + LEMBUR_FIX.toLocaleString('id-ID');
+        document.getElementById('totalGaji').innerText = 'Rp ' + totalGaji.toLocaleString('id-ID');
+
+        document.getElementById('pajakJHT').innerText = 'Rp ' + bpjsJHT.toLocaleString('id-ID');
+        document.getElementById('pajakPPH21').innerText = 'Rp ' + pph21.toLocaleString('id-ID');
+        document.getElementById('potonganBPJS').innerText =
+            'Rp ' + (bpjsKesehatan + bpjsJP).toLocaleString('id-ID');
+        document.getElementById('totalPotongan').innerText =
+        'Rp ' + totalPotongan.toLocaleString('id-ID');
+        document.getElementById('gajiBersih').innerText =
+            'Rp ' + gajiBersih.toLocaleString('id-ID');
+    }
+
+    function exportPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Ambil data dari halaman
+        var nama = document.getElementById('namaOutput').innerText;
+        var transport = document.getElementById('tunjanganTransport').innerText;
+        var makan = document.getElementById('tunjanganMakan').innerText;
+        var operasional = document.getElementById('tunjanganOperasional').innerText;
+        var lembur = document.getElementById('tunjanganLembur').innerText;
+        var totalGaji = document.getElementById('totalGaji').innerText;
+
+        var pajakJHT = document.getElementById('pajakJHT').innerText;
+        var pajakPPH21 = document.getElementById('pajakPPH21').innerText;
+        var potonganBPJS = document.getElementById('potonganBPJS').innerText;
+        var totalPotongan = document.getElementById('totalPotongan').innerText;
+        var gajiBersih = document.getElementById('gajiBersih').innerText;
+
+        // Header
+        doc.setFontSize(14);
+        doc.text("SLIP GAJI KARYAWAN IT PT. UJB", 105, 15, null, null, "center");
+
+        doc.setFontSize(10);
+        doc.text("Created By : Eki - IT PMO", 105, 22, null, null, "center");
+        doc.line(20, 25, 190, 25);
+
+        let y = 35;
+
+        // Identitas
+        doc.setFontSize(11);
+        doc.text("Nama Karyawan : " + nama, 20, y);
+        y += 10;
+
+        // Penghasilan
+        doc.setFontSize(12);
+        doc.text("A. PENGHASILAN", 20, y);
+        y += 8;
+
+        doc.setFontSize(11);
+        doc.text("Tunjangan Transport", 25, y); doc.text(transport, 160, y, null, null, "right"); y += 7;
+        doc.text("Tunjangan Makan", 25, y); doc.text(makan, 160, y, null, null, "right"); y += 7;
+        doc.text("Tunjangan Operasional", 25, y); doc.text(operasional, 160, y, null, null, "right"); y += 7;
+        doc.text("Tunjangan Lembur", 25, y); doc.text(lembur, 160, y, null, null, "right"); y += 7;
+
+        doc.setFont(undefined, "bold");
+        doc.text("Total Gaji", 25, y); doc.text(totalGaji, 160, y, null, null, "right");
+        doc.setFont(undefined, "normal");
+
+        y += 12;
+
+        // Potongan
+        doc.setFontSize(12);
+        doc.text("B. POTONGAN", 20, y);
+        y += 8;
+
+        doc.setFontSize(11);
+        doc.text("Pajak JHT (2%)", 25, y); doc.text(pajakJHT, 160, y, null, null, "right"); y += 7;
+        doc.text("Pajak PPH21", 25, y); doc.text(pajakPPH21, 160, y, null, null, "right"); y += 7;
+        doc.text("Potongan BPJS", 25, y); doc.text(potonganBPJS, 160, y, null, null, "right"); y += 7;
+
+        doc.setFont(undefined, "bold");
+        doc.text("Total Potongan", 25, y); doc.text(totalPotongan, 160, y, null, null, "right");
+        y += 10;
+
+        doc.text("GAJI BERSIH / DITERIMA", 25, y);
+        doc.text(gajiBersih, 160, y, null, null, "right");
+
+        // Footer
+        doc.setFontSize(9);
+        doc.text("Slip gaji ini dihasilkan secara otomatis", 105, 285, null, null, "center");
+
+        // Save
+        doc.save("Slip_Gaji_" + nama + ".pdf");
+    }
     </script>
-</head>
-<body>
-    <!-- main content -->
-    <div id="main-content">
-        <div class="container">
-            <div class="jumbotron mt-4">
-                <h1 class="display-4">Perhitungan Gaji IT Support PT. Apex</h1>
-                <p class="lead">Masukkan data untuk menghitung total gaji Anda.</p>
-                <div class="footer">
-                    <p>Created By: Eki Ardiansyah</p>
+    </head>
+    <body>
+        <!-- main content -->
+        <div id="main-content">
+            <div class="container">
+                <div class="jumbotron mt-4">
+                    <h1 class="display-4">Perhitungan Gaji IT Engineer PT. UJB</h1>
+                    <p class="lead">Masukkan data untuk menghitung total gaji Anda.</p>
+                    <div class="footer">
+                        <strong><p>Created By: Eki Ardiansyah</p></strong>
+                    </div>
                 </div>
-            </div>
-            <div class="form-container">
-                <form onsubmit="event.preventDefault(); hitungGaji();">
-                    <div class="form-group">
-                        <label for="namaKaryawan">Nama Karyawan:</label>
-                        <input type="text" class="form-control" id="namaKaryawan" name="namaKaryawan" required>
+                <div class="form-container">
+                    <form onsubmit="event.preventDefault(); hitungGaji();">
+                        <div class="form-group">
+                            <label for="namaKaryawan">Nama Karyawan:</label>
+                            <input type="text" class="form-control" id="namaKaryawan" name="namaKaryawan" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="jumlahHari">Jumlah Hari Kerja (Transport, Makan, Operasional) :</label>
+                            <input type="number" class="form-control" id="jumlahHari" name="jumlahHari" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="jamLembur">Total Jam Lembur :</label>
+                            <input type="text" class="form-control" id="jamLembur" name="jamLembur" oninput="validateFloatInput(event)" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tunjanganKeahlian">Tunjangan Keahlian :</label>
+                            <input type="number" class="form-control" id="tunjanganKeahlian" name="tunjanganKeahlian" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Hitung Gaji</button>
+                    </form>
+                    <div>
+                    <div class="result mt-4">
+                        <h3>Berikut Perhitungan Gaji Anda</h3>
+                        <br>
+                        <p>Nama Karyawan: <span id="namaOutput"></span></p>
+                        <p>Tunjangan Transport: <span id="tunjanganTransport">Rp 0</span></p>
+                        <p>Tunjangan Makan: <span id="tunjanganMakan">Rp 0</span></p>
+                        <p>Tunjangan Operasional: <span id="tunjanganOperasional">Rp 0</span></p>
+                        <p>Tunjangan Lembur: <span id="tunjanganLembur">Rp 0</span></p>
+                        <strong><p>Total Gaji: <span id="totalGaji">Rp 0</span></p></strong>
+                        <br>
+                        <p>Pajak JHT (2%): <span id="pajakJHT">Rp 0</span></p>
+                        <p>Pajak PPH21 (2%): <span id="pajakPPH21">Rp 0</span></p>
+                        <p>Potongan BPJS (1%): <span id="potonganBPJS">Rp 0</span></p>
+                        <strong> <p>Total Potongan: <span id="totalPotongan">Rp 0</span></p> </strong>
+                        <strong><p>Gaji Bersih / Diterima: <span id="gajiBersih">Rp 0</span></p></strong>
                     </div>
-                    <div class="form-group">
-                        <label for="jumlahHari">Jumlah Hari Kerja (Transport, Makan, Operasional) :</label>
-                        <input type="number" class="form-control" id="jumlahHari" name="jumlahHari" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="jamLembur">Total Jam Lembur :</label>
-                        <input type="text" class="form-control" id="jamLembur" name="jamLembur" oninput="validateFloatInput(event)" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="tunjanganKeahlian">Tunjangan Keahlian :</label>
-                        <input type="number" class="form-control" id="tunjanganKeahlian" name="tunjanganKeahlian" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Hitung Gaji</button>
-                </form>
-                <div>
-                <div class="result mt-4">
-                    <h3>Berikut Perhitungan Gaji Anda</h3>
                     <br>
-                    <p>Nama Karyawan: <span id="namaOutput"></span></p>
-                    <p>Tunjangan Transport: <span id="tunjanganTransport">Rp 0</span></p>
-                    <p>Tunjangan Makan: <span id="tunjanganMakan">Rp 0</span></p>
-                    <p>Tunjangan Operasional: <span id="tunjanganOperasional">Rp 0</span></p>
-                    <p>Tunjangan Lembur: <span id="tunjanganLembur">Rp 0</span></p>
-                    <strong><p>Total Gaji: <span id="totalGaji">Rp 0</span></p></strong>
-                    <br>
-                    <p>Pajak JHT (2%): <span id="pajakJHT">Rp 0</span></p>
-                    <p>Pajak PPH21 (2%): <span id="pajakPPH21">Rp 0</span></p>
-                    <p>Potongan BPJS (1%): <span id="potonganBPJS">Rp 0</span></p>
-                    <strong><p>Gaji Bersih / Diterima: <span id="gajiBersih">Rp 0</span></p></strong>
+                    <div class="d-flex justify-content-left">
+                        <a href="https://bit.ly/WEBITBC" class="btn btn-primary btn-lg">
+                            <i class="fas fa-arrow-left mr-2"></i> Back To Website
+                        </a> &nbsp;&nbsp;&nbsp;
+                        <a href="https://wa.me/6282155201146?text=Halo,%20saya%20ingin%20bertanya%20mengenai%20gaji" class="btn btn-success btn-lg mr-2">
+                            <i class="fab fa-whatsapp mr-2"></i> Chat HR (Mas Muharram)
+                        </a>
+                        <a href="https://wa.me/6282254024990?text=Halo,%20saya%20ingin%20bertanya%20mengenai%20gaji" class="btn btn-success btn-lg mr-2">
+                            <i class="fab fa-whatsapp mr-2"></i> Chat Creator (Eki)
+                        </a>
+                        <a><button type="button" onclick="exportPDF()" class="btn btn-danger btn-block mt-2">
+                            Export Slip Gaji (PDF)
+                            </button>
+                        </a>
+                    </div>
                 </div>
-                <br>
-                <div class="d-flex justify-content-left">
-                    <a href="https://bit.ly/WEBITBC" class="btn btn-primary btn-lg">
-                        <i class="fas fa-arrow-left mr-2"></i> Back To Website
-                    </a> &nbsp;&nbsp;&nbsp;
-                    <a href="https://wa.me/6281258823452?text=Halo,%20saya%20ingin%20bertanya%20mengenai%20gaji" class="btn btn-success btn-lg mr-2">
-                        <i class="fab fa-whatsapp mr-2"></i> Chat HR (Ucup)
-                    </a>
-                    <a href="https://wa.me/6282259661605?text=Halo,%20saya%20ingin%20bertanya%20mengenai%20gaji" class="btn btn-success btn-lg mr-2">
-                        <i class="fab fa-whatsapp mr-2"></i> Chat HR (Jessy)
-                    </a>
                 </div>
-            </div>
             </div>
         </div>
-    </div>
-</body>
-</html>
-
-
+    </body>
+    </html>
