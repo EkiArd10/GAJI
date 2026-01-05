@@ -50,6 +50,26 @@
             font-size: 1.3rem;
             color: #f52b2b;
         }
+        .action-buttons {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        }
+
+    .action-buttons .btn {
+        padding: 14px 10px;
+        font-size: 14px;
+        border-radius: 10px;
+        text-align: center;
+        white-space: normal;
+        }
+
+    /* Desktop */
+    @media (min-width: 768px) {
+    .action-buttons {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
         <script>
@@ -240,20 +260,28 @@
                         <strong><p>Gaji Bersih / Diterima: <span id="gajiBersih">Rp 0</span></p></strong>
                     </div>
                     <br>
-                    <div class="d-flex justify-content-left">
-                        <a href="https://bit.ly/WEBITBC" class="btn btn-primary btn-lg">
-                            <i class="fas fa-arrow-left mr-2"></i> Back To Website
-                        </a> &nbsp;&nbsp;&nbsp;
-                        <a href="https://wa.me/6282155201146?text=Halo,%20saya%20ingin%20bertanya%20mengenai%20gaji" class="btn btn-success btn-lg mr-2">
-                            <i class="fab fa-whatsapp mr-2"></i> Chat HR (Mas Muharram)
+                    <div class="action-buttons mt-4">
+                        <a href="https://bit.ly/WEBITBC" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i><br>
+                            Back To Website
                         </a>
-                        <a href="https://wa.me/6282254024990?text=Halo,%20saya%20ingin%20bertanya%20mengenai%20gaji" class="btn btn-success btn-lg mr-2">
-                            <i class="fab fa-whatsapp mr-2"></i> Chat Creator (Eki)
+
+                        <a href="https://wa.me/6281258823452?text=Halo,%20saya%20ingin%20bertanya%20mengenai%20gaji"
+                        class="btn btn-success">
+                            <i class="fab fa-whatsapp"></i><br>
+                            Chat HR<br>(Mas Muharram)
                         </a>
-                        <a><button type="button" onclick="exportPDF()" class="btn btn-danger btn-block mt-2">
-                            Export Slip Gaji (PDF)
-                            </button>
+
+                        <a href="https://wa.me/6282259661605?text=Halo,%20saya%20ingin%20bertanya%20mengenai%20gaji"
+                        class="btn btn-success">
+                            <i class="fab fa-whatsapp"></i><br>
+                            Chat Creator<br>(Eki)
                         </a>
+
+                        <button onclick="exportPDF()" class="btn btn-danger">
+                            <i class="fas fa-file-pdf"></i><br>
+                            Export Slip Gaji
+                        </button>
                     </div>
                 </div>
                 </div>
